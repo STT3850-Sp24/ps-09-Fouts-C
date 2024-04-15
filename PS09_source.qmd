@@ -1,6 +1,6 @@
 ---
 title: "Problem Set 09"
-author: "Your Name"
+author: "Carson Fouts"
 date: last-modified
 date-format: "[Last modified on] MMMM DD, YYYY HH:mm:ss zzz"
 format: 
@@ -8,7 +8,6 @@ format:
   pdf: default
 editor: visual
 ---
-
 
 ```{r include = FALSE}
 # Do not edit this code block/chunk!
@@ -24,7 +23,6 @@ library(scales)
 library(tidyverse)
 library(infer)
 ```
-
 
 # Background
 
@@ -57,22 +55,21 @@ kable(head(sat_gpa))
 
 Be sure to take a look at the data in `sat_gpa`. Each row or case in this data frame is a student. The data includes the binary gender (`sex`) of each student; the math (`sat_math`), verbal (`sat_verbal`) and total SAT scores (`sat_total`) for each student; the GPA of each student in high school (`gpa_hs`) categorized as "low" or "high"; and the GPA of each student their first year of college on a numeric scale (`gpa_fy`).
 
-::: {.callout-note}
+::: callout-note
 We will use hypothesis testing to answer the following questions:
 
-*  Is there a difference in male and female freshman GPAs?
-*  Is there a difference in total SAT score for students with a "low" and "high" high-school GPA?
+-   Is there a difference in male and female freshman GPAs?
+-   Is there a difference in total SAT score for students with a "low" and "high" high-school GPA?
 
 Note, if you get stuck as you are working through this, it will be helpful to go back and read [Chapter 9](https://moderndive.com/9-hypothesis-testing.html) in [ModernDive](https://moderndive.com/index.html).
 :::
-
 
 # Gender Differences in First-Year GPA?
 
 ## Exploratory Data Analysis
 
 ::: {.callout-note icon="false" title="Problem 1"}
-Calculate the mean GPA score for each sex, using the `group_by` and `summarize` commands from the `dplyr` package.  Store the result in `avg_gpa_sex`.  What is the difference in sample mean GPA's? Make a guess: is this difference statistically significant?
+Calculate the mean GPA score for each sex, using the `group_by` and `summarize` commands from the `dplyr` package. Store the result in `avg_gpa_sex`. What is the difference in sample mean GPA's? Make a guess: is this difference statistically significant?
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 1 Answers"}
@@ -82,17 +79,14 @@ Calculate the mean GPA score for each sex, using the `group_by` and `summarize` 
 
 ```
 
-* Delete this and put your text answer here.   
+-   Delete this and put your text answer here.
 
-* Delete this and put your text answer here.
-
+-   Delete this and put your text answer here.
 :::
-
 
 ::: {.callout-note icon="false" title="Problem 2"}
-Generate a data visualization that displays the GPAs of the two groups. Be sure to include a title and label your axes. 
+Generate a data visualization that displays the GPAs of the two groups. Be sure to include a title and label your axes.
 :::
-
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 2 Answers"}
 ```{r}
@@ -103,7 +97,7 @@ Generate a data visualization that displays the GPAs of the two groups. Be sure 
 
 ## Stating a Null Hypothesis
 
-We will now test the null hypothesis that there's no difference in population mean GPA between the sexes at the population level. We can write this out in mathematical notation 
+We will now test the null hypothesis that there's no difference in population mean GPA between the sexes at the population level. We can write this out in mathematical notation
 
 $$\begin{aligned} H_0:&\mu_{\text{female}} = \mu_{\text{male}} \\\ \mbox{vs }H_A:& \mu_{\text{female}} \neq \mu_{\text{male}} \end{aligned}$$
 
@@ -115,7 +109,7 @@ $$\begin{aligned} H_0:&\mu_{\text{female}} - \mu_{\text{male}} = 0 \\\ \mbox{vs 
 
 Here's how we use infer to run this hypothesis test:
 
-### Step 1: Calculate the Observed Difference{-} 
+### Step 1: Calculate the Observed Difference {.unnumbered}
 
 Note that the order we choose does not matter here (female then male)...but since we used `order = c("Female", "Male")` here, we should do the same in subsequent calculations!
 
@@ -147,7 +141,7 @@ avf_avm
 
 ### Step 2. Generate the Null Distribution of $\delta$
 
-This step involves generating simulated values *as if* we lived in a world where there's no difference between the two groups. Going back to the idea of permutation, and tactile sampling, this is akin to shuffling the GPA scores between male and female labels (i.e. removing the structure to the data) just as we could have done with index cards. 
+This step involves generating simulated values *as if* we lived in a world where there's no difference between the two groups. Going back to the idea of permutation, and tactile sampling, this is akin to shuffling the GPA scores between male and female labels (i.e. removing the structure to the data) just as we could have done with index cards.
 
 ::: {.callout-caution icon="false" title="R Code"}
 ```{r}
@@ -159,15 +153,12 @@ kable(head(gpas_in_null_world))
 ```
 :::
 
-
 ::: {.callout-note icon="false" title="Problem 3"}
 What was the size of the "shuffled" (permuted) sample in each replicate?
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 3 Answers"}
-
-* Delete this and put your text answer here.
-
+-   Delete this and put your text answer here.
 :::
 
 ::: {.callout-note icon="false" title="Problem 4"}
@@ -180,16 +171,14 @@ How many times did we do a different "shuffle" (permute) here to the sample? How
 
 ```
 
+-   Delete this and put your text answer here.
 
-* Delete this and put your text answer here.
-
-* Delete this and put your text answer here.
+-   Delete this and put your text answer here.
 :::
-
 
 ### Step 3. Calculate the Differences Between Male and Females Under the Null Hypothesis
 
-The following calculates the differences in mean GPA for males and females for "shuffled" (permuted) data. 
+The following calculates the differences in mean GPA for males and females for "shuffled" (permuted) data.
 
 ::: {.callout-caution icon="false" title="R Code"}
 ```{r}
@@ -210,21 +199,17 @@ abline(v = obs_diff, lty = "dashed")
 ```
 :::
 
-
 ::: {.callout-note icon="false" title="Problem 5"}
 How many rows are in the `gpa_diff_under_null` data frame? Why?
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 5 Answers"}
-
-* Delete this and put your text answer here.
-
+-   Delete this and put your text answer here.
 :::
 
 ### Step 4. Visualize how the Observed Difference Compares to the Null Distribution of $\delta$
 
-The following plots the $\delta$ values we calculated for each of the different "shuffled" replicates. This is the null distribution of $\delta$. The red line shows the observed difference between male and female scores in the data (`r avf_avm`) from Step 1. 
-
+The following plots the $\delta$ values we calculated for each of the different "shuffled" replicates. This is the null distribution of $\delta$. The red line shows the observed difference between male and female scores in the data (`r avf_avm`) from Step 1.
 
 ::: {.callout-caution icon="false" title="R Code"}
 ```{r}
@@ -238,8 +223,8 @@ gpa_diff_under_null %>%
 ```
 :::
 
-::: {.callout-note}
-**Note that zero is the center of this null distribution.** The null hypothesis is that there is no difference between males and females in GPA score. In the permutations, zero was the most common value, because all structure was removed from the data.  GPA values were sorted into male and female **at random**. Values as large as 0.1 and -0.1 occurred, but much less frequently, because they are just not as likely when structure is removed from the data.  
+::: callout-note
+**Note that zero is the center of this null distribution.** The null hypothesis is that there is no difference between males and females in GPA score. In the permutations, zero was the most common value, because all structure was removed from the data. GPA values were sorted into male and female **at random**. Values as large as 0.1 and -0.1 occurred, but much less frequently, because they are just not as likely when structure is removed from the data.
 :::
 
 ### Step 5: Calculate a p-value
@@ -258,22 +243,17 @@ p_value
 
 The p-value indicates that there is a `r pvalue` or `r round(p_value,4)` chance (very low even with the conservative p-value computation) that we would see a difference of `r obs_diff_gpa_sex` in GPA scores between males and females (or a bigger difference) if in fact there was truly no difference between the sexes in GPA scores at the population level.
 
-
 ::: {.callout-note icon="false" title="Problem 6"}
 Fill in the blanks and select the appropriate words below to write up the results & conclusions for this test:
-
 :::
-
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 6 Answers"}
-The mean GPA scores for females in our sample ($\bar{x}_{f}$ = ____) was greater than that of males ($\bar{x}_{m}$ = ____). This difference **was/was not** statistically significant at  $\alpha = 0.05$, (p = ____).  Given this p-value, I **would/would not** reject the Null hypothesis and **find evidence/do not find evidence** that **females** have higher GPAs than **males** at the population level.
+The mean GPA scores for females in our sample ($\bar{x}_{f}$ = \_\_\_\_) was greater than that of males ($\bar{x}_{m}$ = \_\_\_\_). This difference **was/was not** statistically significant at $\alpha = 0.05$, (p = \_\_\_\_). Given this p-value, I **would/would not** reject the Null hypothesis and **find evidence/do not find evidence** that **females** have higher GPAs than **males** at the population level.
 :::
- 
 
 ### Step 6: Calculate a Confidence Interval for the Difference
 
-The following will allow us to calculate a 95% bootstrap percentile confidence interval for the difference between mean GPA scores for females and males. 
-
+The following will allow us to calculate a 95% bootstrap percentile confidence interval for the difference between mean GPA scores for females and males.
 
 ::: {.callout-caution icon="false" title="R Code"}
 ```{r}
@@ -304,7 +284,7 @@ kable(quantile(mean_ds, probs =c(0.025, 0.975)))
 
 ## Complete all the Above Tasks with a t-test
 
-Note that all the above steps can be done with one line of code **if a slew of assumptions** like normality and equal variance of the groups are met. 
+Note that all the above steps can be done with one line of code **if a slew of assumptions** like normality and equal variance of the groups are met.
 
 ::: {.callout-caution icon="false" title="R Code"}
 ```{r}
@@ -312,16 +292,13 @@ t.test(gpa_fy ~ sex, var.equal = TRUE, data = sat_gpa)
 ```
 :::
 
-
-
-
 # Relationship Between High-School & First-Year GPA?
 
-For this analysis `sat_total` is the outcome variable, and `gpa_hs` is the predictor variable, with two levels "low" and "high". 
+For this analysis `sat_total` is the outcome variable, and `gpa_hs` is the predictor variable, with two levels "low" and "high".
 
 ## Exploratory Data Analysis
 
-We can first calculate the mean total SAT score for each group (i.e students with a low and high GPA), using the `group_by` and `summarize` commands from the `dplyr` package. 
+We can first calculate the mean total SAT score for each group (i.e students with a low and high GPA), using the `group_by` and `summarize` commands from the `dplyr` package.
 
 ::: {.callout-caution icon="false" title="R Code"}
 ```{r}
@@ -332,7 +309,7 @@ kable(avg_sat_gpa)
 ```
 :::
 
-We will next generate a data visualization that displays the total SAT scores of the two groups. Be sure to include a title and label your axes. 
+We will next generate a data visualization that displays the total SAT scores of the two groups. Be sure to include a title and label your axes.
 
 ::: {.callout-caution icon="false" title="R Code"}
 ```{r, fig.width = 10}
@@ -357,17 +334,14 @@ p1 + p2
 
 ## Stating a Null Hypothesis
 
-
 ::: {.callout-note icon="false" title="Problem 7"}
 State the null hypothesis that you are testing (using words and symbols).
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 7 Answers"}
+-   Delete this and put your text answer here.
 
-* Delete this and put your text answer here.
-
-* Delete this and put your text answer here.
-
+-   Delete this and put your text answer here.
 :::
 
 ## Testing the Null Hypothesis
@@ -377,7 +351,6 @@ Calculate the observed difference between the mean total SAT scores of the low a
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 8 Answers"}
-
 ```{r}
 # Type your code and comments inside the code chunk
 
@@ -385,24 +358,19 @@ Calculate the observed difference between the mean total SAT scores of the low a
 :::
 
 ::: {.callout-note icon="false" title="Problem 9"}
-Generate the null distribution of $\delta$. Here you need to generate simulated values *as if* we lived in a world where there's no difference in SAT scores between high school students with low and high GPAs.  Use 2000 replications to generate the null distribution.
+Generate the null distribution of $\delta$. Here you need to generate simulated values *as if* we lived in a world where there's no difference in SAT scores between high school students with low and high GPAs. Use 2000 replications to generate the null distribution.
 :::
 
-
 ::: {.callout-important icon="false" collapse="false" title="Problem 9 Answers"}
-
 ```{r}
 # Type your code and comments inside the code chunk
 
 ```
-
 :::
-
 
 ::: {.callout-note icon="false" title="Problem 10"}
-Calculate the differences in mean SAT scores between students with high and low GPA scores under the null hypothesis. Note you should use whatever order you chose in 7. Store your results in an object named `sat_diff_under_null`.  Show the first six rows of `sat_diff_under_null`. 
+Calculate the differences in mean SAT scores between students with high and low GPA scores under the null hypothesis. Note you should use whatever order you chose in 7. Store your results in an object named `sat_diff_under_null`. Show the first six rows of `sat_diff_under_null`.
 :::
-
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 10 Answers"}
 ```{r}
@@ -411,9 +379,8 @@ Calculate the differences in mean SAT scores between students with high and low 
 ```
 :::
 
-
 ::: {.callout-note icon="false" title="Problem 11"}
-Visualize how the observed difference compares to the null distribution of $\delta$. Generate a histogram of the null distribution, with a vertical red line showing the observed difference in SAT scores between high school students with a high and low GPA. 
+Visualize how the observed difference compares to the null distribution of $\delta$. Generate a histogram of the null distribution, with a vertical red line showing the observed difference in SAT scores between high school students with a high and low GPA.
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 11 Answers"}
@@ -422,7 +389,6 @@ Visualize how the observed difference compares to the null distribution of $\del
 
 ```
 :::
-
 
 ::: {.callout-note icon="false" title="Problem 12"}
 Calculate the p-value.
@@ -434,24 +400,20 @@ Calculate the p-value.
 
 ```
 
-* Delete this and put your text answer here.
-
+-   Delete this and put your text answer here.
 :::
 
-
 ::: {.callout-note icon="false" title="Problem 13"}
-Write up the results & conclusions for this hypothesis test. Note, p-values less than 0.001 are often reported as p < 0.001. 
+Write up the results & conclusions for this hypothesis test. Note, p-values less than 0.001 are often reported as p \< 0.001.
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 13 Answers"}
-
-* Delete this and put your text answer here.
+-   Delete this and put your text answer here.
 :::
 
 ::: {.callout-note icon="false" title="Problem 14"}
-Compute a 95% bootstrap percentile confidence interval for the difference in total SAT scores for students with high and low high-school GPA scores. Note that you should use whatever order you chose for your null hypothesis. That is either `order = c("low", "high")` or `order = c("high", "low")`.  Provide a basic interpretation of your computed interval.
+Compute a 95% bootstrap percentile confidence interval for the difference in total SAT scores for students with high and low high-school GPA scores. Note that you should use whatever order you chose for your null hypothesis. That is either `order = c("low", "high")` or `order = c("high", "low")`. Provide a basic interpretation of your computed interval.
 :::
-
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 14 Answers"}
 ```{r}
@@ -459,10 +421,8 @@ Compute a 95% bootstrap percentile confidence interval for the difference in tot
 
 ```
 
-* Delete this and put your text answer here.
-
+-   Delete this and put your text answer here.
 :::
-
 
 ::: {.callout-note icon="false" title="Problem 15"}
 Use a t-test to test the null hypothesis that average total SAT scores do not differ between students with high and low high school GPA scores at the population level.
@@ -476,7 +436,6 @@ Use a t-test to test the null hypothesis that average total SAT scores do not di
 
 ```
 :::
-
 
 # Turning in Your Work
 
