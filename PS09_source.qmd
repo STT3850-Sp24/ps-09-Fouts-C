@@ -75,22 +75,30 @@ Calculate the mean GPA score for each sex, using the `group_by` and `summarize` 
 ::: {.callout-important icon="false" collapse="false" title="Problem 1 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
+avg_gpa_sex <- sat_gpa %>% 
+  group_by(sex) %>% 
+  summarize(mean_gpa = mean(gpa_fy))
 
-
+avg_gpa_sex
 ```
 
--   Delete this and put your text answer here.
+-   The difference in sample mean GPA's is `r round(abs(diff(avg_gpa_sex$mean_gpa)), 3)`.
 
--   Delete this and put your text answer here.
+-   I would say the difference is statistically significant using the common p value of 0.05 but we would have to use a t-test to find out.
 :::
 
 ::: {.callout-note icon="false" title="Problem 2"}
-Generate a data visualization that displays the GPAs of the two groups. Be sure to include a title and label your axes.
+Generate a data visualization that displays the GPA's of the two groups. Be sure to include a title and label your axes.
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 2 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
+ggplot(sat_gpa, aes(x = sex, y = gpa_fy)) +
+  geom_boxplot() +
+  labs(title = "Distribution of Freshman GPA's by Sex",
+       x = "Sex",
+       y = "Freshman GPA")
 
 ```
 :::
@@ -158,7 +166,8 @@ What was the size of the "shuffled" (permuted) sample in each replicate?
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 3 Answers"}
--   Delete this and put your text answer here.
+
+-   The size of the “shuffled” (permuted) sample in each replicate is `r nrow(sat_gpa)`. This is the same as the size of the original dataset since permutation involves shuffling among the give number of reps and not adding or removing any data.
 :::
 
 ::: {.callout-note icon="false" title="Problem 4"}
@@ -168,12 +177,13 @@ How many times did we do a different "shuffle" (permute) here to the sample? How
 ::: {.callout-important icon="false" collapse="false" title="Problem 4 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+num_shuffles <- max(gpas_in_null_world$replicate)
+num_shuffles
 ```
 
--   Delete this and put your text answer here.
+-   We did a different "shuffle" (permute) here to the sample `r num_shuffles`.
 
--   Delete this and put your text answer here.
+-   There are `r nrow(gpas_in_null_world)` rows in the `gpas_in_null_world` data frame.
 :::
 
 ### Step 3. Calculate the Differences Between Male and Females Under the Null Hypothesis
@@ -204,7 +214,7 @@ How many rows are in the `gpa_diff_under_null` data frame? Why?
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 5 Answers"}
--   Delete this and put your text answer here.
+-   There are `r nrow(gpa_diff_under_null)` many rows in the `gpa_diff_under_null` data frame because the number of rows is equal to the number of permutations  you perform.
 :::
 
 ### Step 4. Visualize how the Observed Difference Compares to the Null Distribution of $\delta$
@@ -248,7 +258,7 @@ Fill in the blanks and select the appropriate words below to write up the result
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 6 Answers"}
-The mean GPA scores for females in our sample ($\bar{x}_{f}$ = \_\_\_\_) was greater than that of males ($\bar{x}_{m}$ = \_\_\_\_). This difference **was/was not** statistically significant at $\alpha = 0.05$, (p = \_\_\_\_). Given this p-value, I **would/would not** reject the Null hypothesis and **find evidence/do not find evidence** that **females** have higher GPAs than **males** at the population level.
+The mean GPA scores for females in our sample ($\bar{x}_{f}$ = `r avg_gpa_sex$mean_gpa[avg_gpa_sex$sex == "Female"]`) was greater than that of males ($\bar{x}_{m}$ = `r avg_gpa_sex$mean_gpa[avg_gpa_sex$sex == "Male"]`). This difference **was** statistically significant at $\alpha = 0.05$, (p = p = 0.001 or 0.0025). Given this p-value, I **would** reject the Null hypothesis and **find evidence** that **females** have higher GPAs than **males** at the population level.
 :::
 
 ### Step 6: Calculate a Confidence Interval for the Difference
@@ -339,9 +349,10 @@ State the null hypothesis that you are testing (using words and symbols).
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 7 Answers"}
--   Delete this and put your text answer here.
+-   The null hypothesis is that The population mean total SAT score for students with a 'low' hs gpa is equal to the population mean total SAT score for students with a 'high' hs gpa.
 
--   Delete this and put your text answer here.
+-   $$\begin{aligned} H_0:&\mu_{\text{high}} - \mu_{\text{low}} = 0 \end{aligned}$$
+
 :::
 
 ## Testing the Null Hypothesis
@@ -353,6 +364,12 @@ Calculate the observed difference between the mean total SAT scores of the low a
 ::: {.callout-important icon="false" collapse="false" title="Problem 8 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
+avg_sat_gpa <- sat_gpa %>%
+  group_by(gpa_hs) %>%
+  summarize(mean_sat_total = mean(sat_total))
+
+obs_diff_sat_hs_gpa <- diff(avg_sat_gpa$mean_sat_total)
+round(abs(obs_diff_sat_hs_gpa), 3)
 
 ```
 :::
@@ -364,7 +381,11 @@ Generate the null distribution of $\delta$. Here you need to generate simulated 
 ::: {.callout-important icon="false" collapse="false" title="Problem 9 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+sat_scores_in_null_world <- sat_gpa %>% 
+  specify(sat_total ~ gpa_hs) %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 2000, type = "permute")
+kable(head(sat_scores_in_null_world))
 ```
 :::
 
@@ -375,6 +396,9 @@ Calculate the differences in mean SAT scores between students with high and low 
 ::: {.callout-important icon="false" collapse="false" title="Problem 10 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
+sat_diff_under_null <- sat_scores_in_null_world %>%
+  calculate(stat = "diff in means", order = c("high", "low"))
+head(sat_diff_under_null)
 
 ```
 :::
@@ -386,7 +410,13 @@ Visualize how the observed difference compares to the null distribution of $\del
 ::: {.callout-important icon="false" collapse="false" title="Problem 11 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+ggplot(sat_diff_under_null, aes(x = stat)) +
+  geom_histogram(binwidth = 1, fill = "darkgreen", color = "black") +
+  geom_vline(aes(xintercept = obs_diff_sat_hs_gpa), color = "red", linetype = "dashed") +
+  labs(title = "Null Distribution of Differences in SAT Scores",
+       x = "Difference in Mean SAT Scores",
+       y = "Frequency") +
+  theme_bw()
 ```
 :::
 
@@ -397,10 +427,11 @@ Calculate the p-value.
 ::: {.callout-important icon="false" collapse="false" title="Problem 12 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+p_value <- mean(sat_diff_under_null$stat >= obs_diff_sat_hs_gpa)
+p_value
 ```
 
--   Delete this and put your text answer here.
+-   The p-value is `r p_value`.
 :::
 
 ::: {.callout-note icon="false" title="Problem 13"}
@@ -408,7 +439,7 @@ Write up the results & conclusions for this hypothesis test. Note, p-values less
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 13 Answers"}
--   Delete this and put your text answer here.
+-   A p-value of `r p_value` means that the hypothesis test failed to reject the null hypothesis and there is no statistical significance.
 :::
 
 ::: {.callout-note icon="false" title="Problem 14"}
@@ -418,10 +449,20 @@ Compute a 95% bootstrap percentile confidence interval for the difference in tot
 ::: {.callout-important icon="false" collapse="false" title="Problem 14 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
+bootstrap_samples <- sat_gpa %>%
+  specify(sat_total ~ gpa_hs) %>%
+  generate(reps = 2000, type = "bootstrap")
 
+bootstrap_differences <- bootstrap_samples %>%
+  calculate(stat = "diff in means", order = c("high", "low"))
+
+ci_diff_sat_scores <- bootstrap_differences %>%
+  get_ci(level = 0.95, type = "percentile")
+
+ci_diff_sat_scores
 ```
 
--   Delete this and put your text answer here.
+-   The confidence interval is: `r ci_diff_sat_scores`.
 :::
 
 ::: {.callout-note icon="false" title="Problem 15"}
@@ -433,6 +474,8 @@ Use a t-test to test the null hypothesis that average total SAT scores do not di
 # Type your code and comments inside the code chunk
 
 # Use the bootstrap T distribution to test
+obs_t_stat <- t.test(sat_total ~ gpa_hs, data = sat_gpa)$statistic
+obs_t_stat
 
 ```
 :::
